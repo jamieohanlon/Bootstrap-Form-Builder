@@ -14,19 +14,13 @@
       <main>
           <vs-button class="html-btn" vs-color="primary" vs-type="gradient" @click="generateHTML()">Build HTML</vs-button>
             <vs-tabs>
-            <vs-tab vs-label="Stage">
+            <vs-tab vs-label="Builder">
                 <div class="con-tab-ejemplo" style="padding: 2rem;">
                     <div class="form-stage">
                         <draggable class="form-stage__drag" :list="newElements" :options="{group: 'elements'}">
 
                             <div v-for="item in newElements" :key="item.id">
-
-                                    <div class="element" :class="['element-'+ item.type]">{{ item.name }} 
-
-                                        <draggable-child :items="item.items" v-if="item.container === true"></draggable-child>
-                                        
-                                    </div>
-
+                                <FormItem :el="item"></FormItem>
                             </div>
                             
                         </draggable>
@@ -55,12 +49,13 @@
 
 <script>
 import draggable from 'vuedraggable'
-import draggableChild from './draggable-child.vue'
+import FormItem from './FormItem.vue'
 
 export default {
+    name: "FormBuilder",
     components: {
         draggable,
-        draggableChild
+        FormItem
     },
   data(){
     return {
@@ -70,7 +65,8 @@ export default {
         { type: "row", name: "Row", container: true, row: true, items: [], id: 0},
         { type: "column", columnSize: 6, name: "Column", container: true, column: true, items: [], id: 0},
         { type: "input", name: "Text Input", id: 0},
-        { type: "textarea", name: "Textarea", id: 0}
+        { type: "textarea", name: "Textarea", id: 0},
+        { type: "button", name: "Button", id: 0}
      ],
      newElements: [
 
@@ -122,6 +118,12 @@ export default {
 
                     formGroup.appendChild(element);
                     html.appendChild(formGroup);
+             } else if (el.type =="button") {
+                 var btn = document.createElement("button");
+                    btn.setAttribute("type", "submit");
+                    btn.classList.add("btn", "btn-primary");
+                    btn.innerText = "Submit";
+                    html.appendChild(btn);
              }
 
 
@@ -163,8 +165,10 @@ export default {
              } else if (el.type == "input") {
                  var formGroup = document.createElement("div");
                     formGroup.classList.add("form-group")
+                    formGroup.appendChild(this.createLabel(el));
                  var element = document.createElement("input");
                     element.setAttribute("type", "text");
+                    element.setAttribute("id", "element" + el.id);
                     element.classList.add("form-control");
 
                     formGroup.appendChild(element);
@@ -173,17 +177,31 @@ export default {
              } else if (el.type == "textarea") {
                  var formGroup = document.createElement("div");
                     formGroup.classList.add("form-group");
-
+                    formGroup.appendChild(this.createLabel(el));
                     var element = document.createElement("textarea")
                         element.setAttribute("rows", 3);
                         element.classList.add("form-control");
 
                     formGroup.appendChild(element);
                     parent.appendChild(formGroup);
+             } else if (el.type =="button") {
+                 var btn = document.createElement("button");
+                    btn.setAttribute("type", "submit");
+                    btn.classList.add("btn", "btn-primary");
+                    btn.innerText = "Submit";
+                    parent.appendChild(btn);
              }
 
              return parent;
 
+      },
+      createLabel: function(el) {
+          var label = document.createElement("label");
+             label.setAttribute("for", "element" + el.id);
+             label.innerText = el.name;
+
+             return label;
+          
       },
       onClone: function(el) {
           this.elIndex++;
@@ -230,7 +248,7 @@ export default {
               id: this.elIndex
             }
 
-          } 
+          }
       }
   }
 }
@@ -299,6 +317,11 @@ export default {
 
     .element-textarea {
         height: 100px;
+    }
+
+    .element-button {
+        background: #007bff;
+        color: white;
     }
 
     .list-complete-item {

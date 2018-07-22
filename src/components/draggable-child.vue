@@ -5,15 +5,12 @@
 
             <div v-for="el in items" :key="el.id" :class="[ el.column ? 'col-6': 'col-12']">
 
-                <div :class="['element element-'+ el.type]">{{ el.name }} 
-
-                    <draggable-child :items="el.items" v-if="el.container == true"></draggable-child>
-
-                </div>
+                <FormItem :el="el"></FormItem>
 
             </div>
 
         </draggable>
+        
 
     </div>
     
@@ -22,12 +19,16 @@
 
 
 <script>
+import FormItem from './FormItem.vue'
 import draggable from 'vuedraggable'
+
+
 export default {
     props: ['items'],
     name: 'draggableChild',
     components: {
-        draggable
+        draggable,
+        FormItem
     }
 }
 </script>
