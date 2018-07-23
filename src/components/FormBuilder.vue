@@ -205,6 +205,7 @@ export default {
       },
       onClone: function(el) {
           this.elIndex++;
+          this.generateHTML();
 
           if (el.type == "container") {
 

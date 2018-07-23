@@ -4,10 +4,13 @@ import Vue from 'vue'
 import App from './App'
 import Vuesax from 'vuesax'
 
-import 'vuesax/dist/vuesax.css'
+import formItem from "./components/FormItem.vue";
 
-Vue.use(Vuesax)
+import "vuesax/dist/vuesax.css";
 
+Vue.use(Vuesax);
+
+Vue.component("FormItem", formItem);
 
 Vue.config.productionTip = false
 

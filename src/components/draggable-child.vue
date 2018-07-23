@@ -27,8 +27,7 @@ export default {
     props: ['items'],
     name: 'draggableChild',
     components: {
-        draggable,
-        FormItem
+        draggable
     }
 }
 </script>
