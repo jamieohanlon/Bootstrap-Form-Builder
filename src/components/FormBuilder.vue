@@ -1,9 +1,8 @@
 <template>
   <div class="form-builder">
       <aside>
-          <h2 class="text-center">Form Builder</h2>
           <div class="elements">
-              <draggable v-model="elements" :options="{group: {name: 'elements', pull: 'clone', put: 'false'},  sort: false}" :clone="onClone">
+              <draggable v-model="elements" :options="{group: {name: 'elements', pull: 'clone', put: 'false'},  sort: false}" :clone="onClone" >
                 <div v-for="item in elements" :key="item.type">
                     <div class="element" :class="['element-'+ item.type]">{{ item.name }}</div>
                 </div>
@@ -13,7 +12,7 @@
       </aside>
       <main>
           <vs-button class="html-btn" vs-color="primary" vs-type="gradient" @click="generateHTML()">Build HTML</vs-button>
-            <vs-tabs>
+            <vs-tabs >
             <vs-tab vs-label="Builder">
                 <div class="con-tab-ejemplo" style="padding: 2rem;">
                     <div class="form-stage">
@@ -83,55 +82,12 @@ export default {
             var t = this;      
           json.forEach(function(el, i) {
             
-            if (el.container == true ) {
-                var element = document.createElement("div");
-
-                if (el.type == "column") {
-                    element.classList.add("col-"+el.columnSize);
-                }
-                element.classList.add(el.type);
-                
-                if (el.items.length !== 0) {
-                    el.items.forEach(function(item) {
-                        html.appendChild(t.checkTypes(item, element));
-                    })
-                } else {
-                    html.appendChild(element);
-                }
-
-             } else if (el.type == "input") {
-                 var formGroup = document.createElement("div");
-                    formGroup.classList.add("form-group")
-                 var element = document.createElement("input");
-                    element.setAttribute("type", "text");
-                    element.classList.add("form-control");
-
-                    formGroup.appendChild(element);
-                    html.appendChild(formGroup);
-             } else if (el.type == "textarea") {
-                    var formGroup = document.createElement("div");
-                    formGroup.classList.add("form-group");
-
-                    var element = document.createElement("textarea")
-                        element.setAttribute("rows", 3);
-                        element.classList.add("form-control");
-
-                    formGroup.appendChild(element);
-                    html.appendChild(formGroup);
-             } else if (el.type =="button") {
-                 var btn = document.createElement("button");
-                    btn.setAttribute("type", "submit");
-                    btn.classList.add("btn", "btn-primary");
-                    btn.innerText = "Submit";
-                    html.appendChild(btn);
-             }
-
-
+           t.checkTypes(el, html);
              
           })
 
           var $code = document.querySelector(".code");
-          var $preview = t.$refs.formPreview;
+
           var newHtml = html_beautify(html.outerHTML);
 
          $code.textContent = newHtml;
@@ -171,6 +127,10 @@ export default {
                     element.setAttribute("id", "element" + el.id);
                     element.classList.add("form-control");
 
+                    if (el.placeholder) {
+                        element.setAttribute("placeholder", el.placeholderText);
+                    }
+
                     formGroup.appendChild(element);
                     parent.appendChild(formGroup);
 
@@ -205,7 +165,6 @@ export default {
       },
       onClone: function(el) {
           this.elIndex++;
-          this.generateHTML();
 
           if (el.type == "container") {
 
@@ -245,8 +204,14 @@ export default {
 
             return {
               type: el.type,
+              showLabel: true,
+              labelText: el.name,
               name: el.name,
-              id: this.elIndex
+              id: this.elIndex,
+              label: false,
+              labeltext: "",
+              placeholder: false,
+              placeholderText: ""
             }
 
           }
@@ -300,6 +265,7 @@ export default {
         border-radius: 5px;
         padding: 0.5rem 1rem;
         margin-bottom: 0.5rem;
+        position: relative;
     }
 
     .element-column {
@@ -375,6 +341,7 @@ export default {
     text-transform: uppercase;
     font-size: 0.7rem;
 }
+
 </style>
 
 
