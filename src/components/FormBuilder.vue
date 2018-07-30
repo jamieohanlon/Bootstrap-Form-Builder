@@ -96,9 +96,6 @@ export default {
          PR.prettyPrint();
          document.querySelector(".code-output").classList.add("visible");
 
-
-          
-
       },
       checkTypes: function(el, parent) {
                 var t = this;
@@ -121,10 +118,12 @@ export default {
              } else if (el.type == "input") {
                  var formGroup = document.createElement("div");
                     formGroup.classList.add("form-group")
-                    formGroup.appendChild(this.createLabel(el));
+                    el.label ? formGroup.appendChild(this.createLabel(el)) : void 0;
                  var element = document.createElement("input");
                     element.setAttribute("type", "text");
-                    element.setAttribute("id", "element" + el.id);
+                    el.class ? element.classList.add(el.class) : void 0;
+                    el.classId ? element.setAttribute("id", el.classId) : element.setAttribute("id", "element" + el.id);
+                    el.required ? element.setAttribute("required", true) : void 0;
                     element.classList.add("form-control");
 
                     if (el.placeholder) {
@@ -137,10 +136,15 @@ export default {
              } else if (el.type == "textarea") {
                  var formGroup = document.createElement("div");
                     formGroup.classList.add("form-group");
-                    formGroup.appendChild(this.createLabel(el));
+                    if (el.label) {
+                        formGroup.appendChild(this.createLabel(el));
+                    }
                     var element = document.createElement("textarea")
                         element.setAttribute("rows", 3);
                         element.classList.add("form-control");
+                        el.class ? element.classList.add(el.class) : void 0;
+                        el.classId ? element.setAttribute("id", el.classId) : element.setAttribute("id", "element" + el.id);
+                        el.required ? element.setAttribute("required", true) : void 0;
 
                     formGroup.appendChild(element);
                     parent.appendChild(formGroup);
@@ -157,8 +161,8 @@ export default {
       },
       createLabel: function(el) {
           var label = document.createElement("label");
-             label.setAttribute("for", "element" + el.id);
-             label.innerText = el.name;
+             el.classId ? label.setAttribute("for", el.classId) : label.setAttribute("for", "element" + el.id);
+             label.innerText = el.labelText;
 
              return label;
           
@@ -208,10 +212,12 @@ export default {
               labelText: el.name,
               name: el.name,
               id: this.elIndex,
-              label: false,
-              labeltext: "",
+              label: true,
               placeholder: false,
-              placeholderText: ""
+              placeholderText: "",
+              class: "",
+              classId: "",
+              required: false
             }
 
           }
@@ -266,6 +272,7 @@ export default {
         padding: 0.5rem 1rem;
         margin-bottom: 0.5rem;
         position: relative;
+        min-height: 42px;
     }
 
     .element-column {

@@ -8,13 +8,40 @@
                 <div class="edit-options__item">
                     <vs-input class="inputx" vs-label="Element Name" :placeholder="item.name" v-model="item.name"/>
                 </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="edit-options__item">
+                            <vs-input class="inputx" vs-label="Element Class" :placeholder="item.class" v-model="item.class"/>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="edit-options__item">
+                            <vs-input class="inputx" vs-label="Element ID" :placeholder="item.classId" v-model="item.classId"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-options__item-group">
+                    <div class="edit-options__item edit-options__item--switch">
+                        <label for="">Enable placeholder</label>
+                        <vs-switch v-model="item.placeholder"/>
+                    </div>
+                    <div v-if="item.placeholder" class="edit-options__item">
+                    <vs-input class="inputx" vs-label="Placeholder Text" :placeholder="item.placeholderText" v-model="item.placeholderText"/>
+                    </div>
+                </div>
+                <div class="edit-options__item-group">
+                    <div class="edit-options__item edit-options__item--switch">
+                        <label for="">Enable label</label>
+                        <vs-switch v-model="item.label"/>
+                    </div>
+                    <div v-if="item.label" class="edit-options__item">
+                    <vs-input class="inputx" vs-label="Label Text" :placeholder="item.labelText" v-model="item.labelText"/>
+                    </div>
+                </div>
                 <div class="edit-options__item edit-options__item--switch">
-                    <label for="">Enable placeholder</label>
-                    <vs-switch v-model="item.placeholder"/>
-                </div>
-                <div v-if="item.placeholder" class="edit-options__item">
-                   <vs-input class="inputx" vs-label="Placeholder Text" :placeholder="item.placeholderText" v-model="item.placeholderText"/>
-                </div>
+                    <label for="">Required</label>
+                    <vs-switch v-model="item.required"/>
+                    </div>
             </div>
         </div>
         <div class="col-6">
@@ -65,6 +92,10 @@ export default {
 
 .edit-options__item .vs-con-input-label {
     width: 100%;
+}
+
+.edit-options__item-group .edit-options__item {
+    margin: 0;
 }
 
 .edit-options__preview {
