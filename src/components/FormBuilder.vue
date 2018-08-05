@@ -12,14 +12,13 @@
       </aside>
       <main>
           <vs-button class="html-btn" vs-color="primary" vs-type="gradient" @click="generateHTML()">Build HTML</vs-button>
-            <vs-tabs >
+            <vs-tabs>
             <vs-tab vs-label="Builder">
                 <div class="con-tab-ejemplo" style="padding: 2rem;">
                     <div class="form-stage">
                         <draggable class="form-stage__drag" :list="newElements" :options="{group: 'elements'}">
-
-                            <div v-for="item in newElements" :key="item.id">
-                                <FormItem :el="item"></FormItem>
+                            <div v-for="(item, index) in newElements" :key="item.id">
+                                <FormItem :el="item" :index="index" :items="newElements"></FormItem>
                             </div>
                             
                         </draggable>
@@ -32,16 +31,18 @@
                     </div>
                 </div>
             </vs-tab>
+            <vs-tab vs-label="Code" >
+                <div class="con-tab-ejemplo" style="padding: 2rem;">
+                    <div class="code-output">
+                        <p class="code-output__title">html output</p>
+                        <code>
+                            <pre class="code prettyprint lang-html" style="border: none !important;">{{ code }}</pre>
+                        </code>
+                    </div>
+                </div>
+            </vs-tab>
             </vs-tabs>
 
-        <div class="code-output">
-            <p class="code-output__title">html output</p>
-          <code>
-              <pre class="code prettyprint lang-html" style="border: none !important;">
-
-              </pre>
-          </code>
-        </div>
       </main>
   </div>
 </template>
@@ -63,6 +64,7 @@ export default {
         { type: "container", name: "Container", container: true, items: [], id: 0},
         { type: "row", name: "Row", container: true, row: true, items: [], id: 0},
         { type: "column", columnSize: 6, name: "Column", container: true, column: true, items: [], id: 0},
+        { type: "panel", name: "Panel", container: true, items: [], id: 0},
         { type: "input", name: "Text Input", id: 0},
         { type: "textarea", name: "Textarea", id: 0},
         { type: "button", name: "Button", id: 0}
@@ -70,7 +72,8 @@ export default {
      newElements: [
 
      ],
-     liveHtml: ""
+     liveHtml: "",
+     code: ""
     }
   },
   methods: {
@@ -86,16 +89,12 @@ export default {
              
           })
 
-          var $code = document.querySelector(".code");
-
           var newHtml = html_beautify(html.outerHTML);
 
-         $code.textContent = newHtml;
+         this.code = newHtml;
          this.liveHtml = html.outerHTML;
-         document.querySelector(".code").classList.remove("prettyprinted");
-         PR.prettyPrint();
-         document.querySelector(".code-output").classList.add("visible");
-
+         //document.querySelector(".code").classList.remove("prettyprinted");
+         //PR.prettyPrint();
       },
       checkTypes: function(el, parent) {
                 var t = this;
@@ -105,17 +104,42 @@ export default {
                 if (el.type == "column") {
                     element.classList.add("col-"+el.columnSize);
                 }
-                element.classList.add(el.type);
 
-                if (el.items.length !== 0) {
-                    el.items.forEach(function(item) {
-                        parent.appendChild(t.checkTypes(item, element));
-                    })
+
+                if (el.type == "panel") {
+                    element.classList.add("card");
+                    var header = document.createElement("div");
+                        header.classList.add("card-header");
+                        var title = document.createElement("div");
+                            title.innerText = el.name;
+                            header.appendChild(title);
+                    var body = document.createElement("div");
+                        body.classList.add("card-body");
+                        element.appendChild(header);
+
+                        if (el.items.length !== 0) {
+                            el.items.forEach(function(item) {
+                                parent.appendChild(t.checkTypes(item, body));
+                            })
+                        } 
+                        element.appendChild(body);
+                         parent.appendChild(element);
+
+
                 } else {
-                    parent.appendChild(element);
+
+                    element.classList.add(el.type);
+
+                    if (el.items.length !== 0) {
+                        el.items.forEach(function(item) {
+                            parent.appendChild(t.checkTypes(item, element));
+                        })
+                    } else {
+                        parent.appendChild(element);
+                    }
                 }
                 
-             } else if (el.type == "input") {
+             }  else if (el.type == "input") {
                  var formGroup = document.createElement("div");
                     formGroup.classList.add("form-group")
                     el.label ? formGroup.appendChild(this.createLabel(el)) : void 0;
@@ -151,8 +175,8 @@ export default {
              } else if (el.type =="button") {
                  var btn = document.createElement("button");
                     btn.setAttribute("type", "submit");
-                    btn.classList.add("btn", "btn-primary");
-                    btn.innerText = "Submit";
+                    btn.classList.add("btn", "btn-"+el.buttonType);
+                    btn.innerText = el.buttonText;
                     parent.appendChild(btn);
              }
 
@@ -170,7 +194,7 @@ export default {
       onClone: function(el) {
           this.elIndex++;
 
-          if (el.type == "container") {
+          if (el.type == "container" || el.type == "panel") {
 
             return {
               type: el.type,
@@ -204,6 +228,16 @@ export default {
               items: []
             }
 
+          } else if (el.type == "button") {
+
+            return {
+                type: el.type,
+                name: el.name,
+                id: this.elIndex,
+                buttonText: "Submit",
+                buttonType: "primary"
+            }
+              
           } else {
 
             return {
@@ -234,17 +268,18 @@ export default {
 
     aside {
         padding: 2rem;
-        flex-basis: 20%;
+        width: 20%;
         background: white;
         height: 100vh;
         box-shadow: 1px 0 20px rgba(0,0,0,0.1);
-        position: relative;
+        position: fixed;
         z-index: 2;
     }
 
     main {
         flex-basis: 80%;
         position: relative;
+        margin-left: auto;
     }
 
     pre {
@@ -273,6 +308,10 @@ export default {
         margin-bottom: 0.5rem;
         position: relative;
         min-height: 42px;
+    }
+
+    .element-panel {
+        background: #d2e8ff;
     }
 
     .element-column {
@@ -317,25 +356,26 @@ export default {
 }
 .ul-tabs {
     list-style: none;
+    background: white;
+    position: fixed !important; 
+    z-index: 1;
 }
 
+.contiene-tabs {
+    margin-top: 2.5rem;
+}
 
 .html-btn {
     position: absolute;
     top: 5px;
     right: 2rem;
-    z-index: 1;
+    z-index: 2;
 }
 .code-output {
-    position: absolute;
-    bottom: 0;
-    left: 0;
     width: 100%;
     padding: 2rem;
     background: white; 
-    max-height: 300px;
-    overflow-y: scroll;
-    display: none;
+    font-size: 1rem;
 }
 
 .code-output.visible {

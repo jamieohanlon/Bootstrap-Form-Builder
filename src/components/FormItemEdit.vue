@@ -3,7 +3,7 @@
     <vs-button class="element-edit" @click="active=true" vs-color="primary" vs-type="flat" vs-size="small">Edit</vs-button>
     <vs-popup class="holamundo"  :vs-title="'Editing: '+item.name" :vs-active="active" @vs-cancel="active=false">
     <div class="row">
-        <div class="col-6">
+        <div class="col-12">
             <div class="edit-options" v-if="item.type == 'input' || item.type == 'textarea'">
                 <div class="edit-options__item">
                     <vs-input class="inputx" vs-label="Element Name" :placeholder="item.name" v-model="item.name"/>
@@ -20,13 +20,22 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div v-if="item.label" class="edit-options__item">
+                            <vs-input class="inputx" vs-label="Label Text" :placeholder="item.labelText" v-model="item.labelText"/>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div v-if="item.placeholder" class="edit-options__item">
+                            <vs-input class="inputx" vs-label="Placeholder Text" :placeholder="item.placeholderText" v-model="item.placeholderText"/>
+                        </div>
+                    </div>
+                </div>
                 <div class="edit-options__item-group">
                     <div class="edit-options__item edit-options__item--switch">
                         <label for="">Enable placeholder</label>
                         <vs-switch v-model="item.placeholder"/>
-                    </div>
-                    <div v-if="item.placeholder" class="edit-options__item">
-                    <vs-input class="inputx" vs-label="Placeholder Text" :placeholder="item.placeholderText" v-model="item.placeholderText"/>
                     </div>
                 </div>
                 <div class="edit-options__item-group">
@@ -34,21 +43,44 @@
                         <label for="">Enable label</label>
                         <vs-switch v-model="item.label"/>
                     </div>
-                    <div v-if="item.label" class="edit-options__item">
-                    <vs-input class="inputx" vs-label="Label Text" :placeholder="item.labelText" v-model="item.labelText"/>
-                    </div>
                 </div>
                 <div class="edit-options__item edit-options__item--switch">
                     <label for="">Required</label>
                     <vs-switch v-model="item.required"/>
                     </div>
             </div>
+            <div class="edit-options" v-if="item.type == 'column'">
+                <div class="edit-options__item">
+                    <vs-input-number min="2" max="12" v-model="item.columnSize"/>
+                </div>
+            </div>
+            <div class="edit-options" v-if="item.type == 'button'">
+                 <div class="edit-options__item">
+                    <vs-input class="inputx" vs-label="Button Text" :placeholder="item.buttonText" v-model="item.buttonText"/>
+                </div>
+                <div class="edit-options__item">
+                    <span>Select the button type (<a href="https://getbootstrap.com/docs/4.1/components/buttons/">See here for examples</a>):</span>
+                     <vs-select class="selectExample" label="Figuras" v-model="item.buttonType">
+                        <vs-select-item  vs-value="primary" vs-text="Primary" />
+                        <vs-select-item  vs-value="secondary" vs-text="Secondary" />
+                        <vs-select-item  vs-value="success" vs-text="Success" />
+                        <vs-select-item  vs-value="danger" vs-text="Danger" />
+                        <vs-select-item  vs-value="warning" vs-text="Warning" />
+                        <vs-select-item  vs-value="info" vs-text="Info" />
+                        <vs-select-item  vs-value="light" vs-text="Light" />
+                        <vs-select-item  vs-value="dark" vs-text="Dark" />
+                        <vs-select-item  vs-value="link" vs-text="Link" />
+                    </vs-select>
+
+              
+                </div>
+            </div>
         </div>
-        <div class="col-6">
+        <!--<div class="col-6">
             <div class="edit-options__preview">
                 ELEMENT PREVIEW
             </div>
-        </div>
+        </div>-->
      </div>
     </vs-popup>
   </div>
@@ -75,12 +107,6 @@ export default {
 
 <style>
 
-.element-edit {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-}
-
 .edit-options__item {
     margin-bottom: 1.5rem;
 }
@@ -105,6 +131,14 @@ export default {
     align-items: center;
     justify-content: center;
     background: #ecfaff;
+}
+
+.element-button .element-edit {
+    color: white;
+}
+
+.input-select {
+    width: 100%;
 }
 </style>
 

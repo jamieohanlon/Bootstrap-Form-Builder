@@ -5,7 +5,7 @@ import App from './App'
 import Vuesax from 'vuesax'
 
 import formItem from "./components/FormItem.vue";
-
+import 'material-icons/iconfont/material-icons.css';
 import "vuesax/dist/vuesax.css";
 
 Vue.use(Vuesax);

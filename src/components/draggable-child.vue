@@ -3,7 +3,7 @@
 
         <draggable class="form-stage__drag row" :options="{group: 'elements'}" :list="items"  @add="onAdd">
 
-            <div v-for="el in items" :key="el.id" :class="[ el.column ? 'col-6': 'col-12']">
+            <div v-for="el in items" :key="el.id" :class="[ el.column ? 'col-'+el.columnSize: 'col-12']">
 
                 <FormItem :el="el"></FormItem>
 
