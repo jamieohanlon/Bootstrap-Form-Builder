@@ -382,7 +382,6 @@ export default {
 .ul-tabs {
     list-style: none;
     background: white;
-    position: fixed !important; 
     z-index: 1;
 }
 
@@ -415,8 +414,7 @@ export default {
 }
 
 .con-tab-ejemplo {
-    padding: 3rem 2rem 2rem 2rem;
-    margin-top: 2rem;
+    padding: 1rem 2rem;
 }
 
 .ul-tabs li {
