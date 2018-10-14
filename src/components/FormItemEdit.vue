@@ -1,7 +1,7 @@
 <template>
 <div class="centerx">
     <vs-button class="element-edit" @click="active=true" vs-color="primary" vs-type="flat" vs-size="small">Edit</vs-button>
-    <vs-popup class="holamundo"  :vs-title="'Editing: '+item.name" :vs-active="active" @vs-cancel="active=false">
+    <vs-popup class="holamundo" :title="'Editing: '+item.name" :active.sync="active" @vs-cancel="active=false">
     <div class="row">
         <div class="col-12">
             <div class="edit-options" v-if="item.type == 'input' || item.type == 'textarea'">
@@ -75,6 +75,27 @@
               
                 </div>
             </div>
+            <div class="edit-options" v-if="item.type == 'panel'">
+                 <div class="edit-options__item">
+                    <vs-input class="inputx" vs-label="Panel Title" :placeholder="item.name" v-model="item.name"/>
+                </div>
+                <div class="edit-options__item">
+                    <span>Select the button type (<a href="https://getbootstrap.com/docs/4.1/components/buttons/">See here for examples</a>):</span>
+                     <vs-select class="selectExample" label="Figuras" v-model="item.backgroundColor">
+                        <vs-select-item  vs-value="primary" vs-text="Primary" />
+                        <vs-select-item  vs-value="secondary" vs-text="Secondary" />
+                        <vs-select-item  vs-value="success" vs-text="Success" />
+                        <vs-select-item  vs-value="danger" vs-text="Danger" />
+                        <vs-select-item  vs-value="warning" vs-text="Warning" />
+                        <vs-select-item  vs-value="info" vs-text="Info" />
+                        <vs-select-item  vs-value="light" vs-text="Light" />
+                        <vs-select-item  vs-value="dark" vs-text="Dark" />
+                        <vs-select-item  vs-value="link" vs-text="Link" />
+                    </vs-select>
+
+              
+                </div>
+            </div>
         </div>
         <!--<div class="col-6">
             <div class="edit-options__preview">
@@ -106,6 +127,10 @@ export default {
 </script>
 
 <style>
+
+.vs-popup-text {
+    overflow-x: hidden !important;
+}
 
 .edit-options__item {
     margin-bottom: 1.5rem;

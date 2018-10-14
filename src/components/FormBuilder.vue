@@ -12,9 +12,9 @@
       </aside>
       <main>
           <vs-button class="html-btn" vs-color="primary" vs-type="gradient" @click="generateHTML()">Build HTML</vs-button>
-            <vs-tabs>
+            <vs-tabs v-model="tab">
             <vs-tab vs-label="Builder">
-                <div class="con-tab-ejemplo" style="padding: 2rem;">
+                <div class="con-tab-ejemplo">
                     <div class="form-stage">
                         <draggable class="form-stage__drag" :list="newElements" :options="{group: 'elements'}">
                             <div v-for="(item, index) in newElements" :key="item.id">
@@ -26,13 +26,13 @@
                 </div>
             </vs-tab>
             <vs-tab vs-label="Preview">
-                <div class="con-tab-ejemplo" style="padding: 2rem;">
+                <div class="con-tab-ejemplo">
                     <div class="form-preview" v-html="liveHtml">
                     </div>
                 </div>
             </vs-tab>
             <vs-tab vs-label="Code" >
-                <div class="con-tab-ejemplo" style="padding: 2rem;">
+                <div class="con-tab-ejemplo">
                     <div class="code-output">
                         <p class="code-output__title">html output</p>
                         <code>
@@ -42,6 +42,7 @@
                 </div>
             </vs-tab>
             </vs-tabs>
+
 
       </main>
   </div>
@@ -60,6 +61,7 @@ export default {
   data(){
     return {
      elIndex: 0,
+     tab: 0,
      elements: [
         { type: "container", name: "Container", container: true, items: [], id: 0},
         { type: "row", name: "Row", container: true, row: true, items: [], id: 0},
@@ -76,7 +78,23 @@ export default {
      code: ""
     }
   },
+  watch: {
+      tab: function() {
+          if (this.tab == 2) {
+              var t = this;
+              setTimeout(function () {
+              t.prettyCode();
+              }, 100);
+          }
+      }
+  },
   methods: {
+      prettyCode: function() {
+            document.querySelector(".code").classList.remove("prettyprinted");
+            PR.prettyPrint();
+            console.log("pretty");
+
+      },
       generateHTML: function() {
           var json = JSON.parse(JSON.stringify(this.newElements));
           var html = document.createElement("form");
@@ -93,8 +111,7 @@ export default {
 
          this.code = newHtml;
          this.liveHtml = html.outerHTML;
-         //document.querySelector(".code").classList.remove("prettyprinted");
-         //PR.prettyPrint();
+         //this.prettyCode();
       },
       checkTypes: function(el, parent) {
                 var t = this;
@@ -108,6 +125,7 @@ export default {
 
                 if (el.type == "panel") {
                     element.classList.add("card");
+                    el.backgroundColor ? element.classList.add("bg-" + el.backgroundColor, "text-white") : void 0;
                     var header = document.createElement("div");
                         header.classList.add("card-header");
                         var title = document.createElement("div");
@@ -238,6 +256,13 @@ export default {
                 buttonType: "primary"
             }
               
+          } else if (el.type =="panel") {
+              return {
+                  type: el.type,
+                  name: el.name,
+                  id: this.elIndex,
+                  backgroundColor: ""
+              }
           } else {
 
             return {
@@ -388,6 +413,29 @@ export default {
     text-transform: uppercase;
     font-size: 0.7rem;
 }
+
+.con-tab-ejemplo {
+    padding: 3rem 2rem 2rem 2rem;
+    margin-top: 2rem;
+}
+
+.ul-tabs li {
+    padding: 0.5rem;
+}
+
+button:focus {
+    outline: 0 !important;
+}
+
+.con-ul-tabs .activeChild button {
+    outline: 0 !important;
+}
+
+.line-vs-tabs {
+    z-index: 99;
+    top: 60px;
+}
+
 
 </style>
 
