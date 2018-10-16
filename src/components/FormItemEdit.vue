@@ -47,7 +47,7 @@
                 <div class="edit-options__item edit-options__item--switch">
                     <label for="">Required</label>
                     <vs-switch v-model="item.required"/>
-                    </div>
+                </div>
             </div>
             <div class="edit-options" v-if="item.type == 'column'">
                 <div class="edit-options__item">
@@ -119,10 +119,7 @@ export default {
     return {
       active:false,
     }
-  },
-    methods: {
-
-    }
+  }
 }
 </script>
 
@@ -164,6 +161,10 @@ export default {
 
 .input-select {
     width: 100%;
+}
+
+.vs-component .vs-switch {
+    border-radius: 12px !important;
 }
 </style>
 

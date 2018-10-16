@@ -2,7 +2,7 @@
   <div class="form-builder">
       <aside>
           <div class="elements">
-              <draggable v-model="elements" :options="{group: {name: 'elements', pull: 'clone', put: 'false'},  sort: false}" :clone="onClone" >
+              <draggable v-model="elements" :options="{group: {name: 'elements', pull: 'clone', put: 'false'},  sort: false}" :clone="onClone">
                 <div v-for="item in elements" :key="item.type">
                     <div class="element" :class="['element-'+ item.type]">{{ item.name }}</div>
                 </div>
@@ -86,6 +86,12 @@ export default {
               t.prettyCode();
               }, 100);
           }
+      },
+      newElements: {
+          handler() {
+              this.generateHTML();
+          },
+          deep: true
       }
   },
   methods: {
@@ -210,6 +216,7 @@ export default {
           
       },
       onClone: function(el) {
+          
           this.elIndex++;
 
           if (el.type == "container" || el.type == "panel") {
@@ -382,8 +389,12 @@ export default {
 .ul-tabs {
     list-style: none;
     background: white;
-    position: fixed !important; 
     z-index: 1;
+    box-shadow: 0 0 25px 0 rgba(0,0,0,.2) !important;
+}
+
+.con-vs-tabs .con-ul-tabs .ul-tabs li button {
+    font-weight: bold;
 }
 
 .contiene-tabs {
@@ -415,8 +426,7 @@ export default {
 }
 
 .con-tab-ejemplo {
-    padding: 3rem 2rem 2rem 2rem;
-    margin-top: 2rem;
+    padding: 1rem 2rem;
 }
 
 .ul-tabs li {
@@ -436,6 +446,9 @@ button:focus {
     top: 60px;
 }
 
+.form-preview .container {
+    max-width: 100% !important;
+}
 
 </style>
 

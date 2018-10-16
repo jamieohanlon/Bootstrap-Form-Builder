@@ -3,9 +3,9 @@
 
         <draggable class="form-stage__drag row" :options="{group: 'elements'}" :list="items"  @add="onAdd">
 
-            <div v-for="el in items" :key="el.id" :class="[ el.column ? 'col-'+el.columnSize: 'col-12']">
+            <div v-for="(el, index) in items" :key="el.id" :class="[ el.column ? 'col-'+el.columnSize: 'col-12']">
 
-                <FormItem :el="el"></FormItem>
+                <FormItem :el="el" :items="items" :index="index"></FormItem>
 
             </div>
 
@@ -24,7 +24,7 @@ import draggable from 'vuedraggable'
 
 
 export default {
-    props: ['items'],
+    props: ['parent','items'],
     name: 'draggableChild',
     components: {
         draggable
