@@ -98,7 +98,7 @@
                     <vs-input class="inputx" vs-label="Panel Title" :placeholder="item.name" v-model="item.name"/>
                 </div>
                 <div class="edit-options__item">
-                    <span>Select the background color (<a href="https://getbootstrap.com/docs/4.1/components/buttons/">See here for examples</a>):</span>
+                    <span>Change panel background color (<a href="https://getbootstrap.com/docs/4.0/utilities/colors/#background-color">See here for examples</a>):</span>
                      <vs-select class="selectExample" label="Figuras" v-model="item.backgroundColor">
                         <vs-select-item  vs-value="primary" vs-text="Primary" />
                         <vs-select-item  vs-value="secondary" vs-text="Secondary" />
