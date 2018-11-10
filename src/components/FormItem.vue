@@ -1,5 +1,4 @@
 <template>
-
     <div :class="['element element-'+ el.type]"><span>{{ el.type !== "text" ? el.name : el.body }}</span>
         <span class="element-col" v-if="el.type == 'column'">({{ el.columnSize }} of 12)</span>
         <div class="element-tools">
@@ -10,7 +9,6 @@
         <draggableChild :items="el.items" :parent="items" v-if="el.container == true"></draggableChild>
 
     </div>
-
 </template>
 
 <script>
