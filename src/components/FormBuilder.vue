@@ -11,13 +11,12 @@
 
       </aside>
       <main>
-          <vs-button class="html-btn" vs-color="primary" vs-type="gradient" @click="generateHTML()">Build HTML</vs-button>
             <vs-tabs v-model="tab">
             <vs-tab vs-label="Builder">
                 <div class="con-tab-ejemplo">
                     <div class="form-stage">
                         <draggable class="form-stage__drag" :list="newElements" :options="{group: 'elements'}">
-                            <div v-for="(item, index) in newElements" :key="item.id">
+                            <div v-for="(item, index) in newElements" :key="index">
                                 <FormItem :el="item" :index="index" :items="newElements"></FormItem>
                             </div>
                             
@@ -69,7 +68,8 @@ export default {
         { type: "panel", name: "Panel", container: true, items: [], id: 0},
         { type: "input", name: "Text Input", id: 0},
         { type: "textarea", name: "Textarea", id: 0},
-        { type: "button", name: "Button", id: 0}
+        { type: "button", name: "Button", id: 0},
+        { type: "text", name: "Text Block", id: 0, body: "Sample Text"}
      ],
      newElements: [
 
@@ -171,7 +171,9 @@ export default {
                     element.setAttribute("type", "text");
                     el.class ? element.classList.add(el.class) : void 0;
                     el.classId ? element.setAttribute("id", el.classId) : element.setAttribute("id", "element" + el.id);
+                    el.className ? element.setAttribute("name", el.className) : element.setAttribute("name", "element" + el.id);
                     el.required ? element.setAttribute("required", true) : void 0;
+                    el.readOnly ? element.setAttribute("readonly", true) : void 0;
                     element.classList.add("form-control");
 
                     if (el.placeholder) {
@@ -202,6 +204,10 @@ export default {
                     btn.classList.add("btn", "btn-"+el.buttonType);
                     btn.innerText = el.buttonText;
                     parent.appendChild(btn);
+             } else if (el.type =="text") {
+                 var text = document.createElement("p");
+                    text.innerText = el.body;
+                    parent.appendChild(text);
              }
 
              return parent;
@@ -263,6 +269,15 @@ export default {
                 buttonType: "primary"
             }
               
+          } else if (el.type == "text") {
+
+            return {
+                type: el.type,
+                name: el.name,
+                id: this.elIndex,
+                body: "Sample text"
+            }
+              
           } else if (el.type =="panel") {
               return {
                   type: el.type,
@@ -283,7 +298,9 @@ export default {
               placeholderText: "",
               class: "",
               classId: "",
-              required: false
+              className: "",
+              required: false,
+              readOnly: false
             }
 
           }
@@ -367,6 +384,13 @@ export default {
     .element-button {
         background: #007bff;
         color: white;
+    }
+
+    .element-text {
+        font-size: 14px;
+        border: none;
+        color: grey;
+        background: #f1f1f1;
     }
 
     .list-complete-item {

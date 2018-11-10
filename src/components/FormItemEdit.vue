@@ -5,9 +5,19 @@
     <div class="row">
         <div class="col-12">
             <div class="edit-options" v-if="item.type == 'input' || item.type == 'textarea'">
-                <div class="edit-options__item">
-                    <vs-input class="inputx" vs-label="Element Name" :placeholder="item.name" v-model="item.name"/>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="edit-options__item">
+                            <vs-input class="inputx" vs-label="Display Name" :placeholder="item.name" v-model="item.name"/>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="edit-options__item">
+                            <vs-input class="inputx" vs-label="Element Name" :placeholder="item.className" v-model="item.className"/>
+                        </div>
+                    </div>
                 </div>
+                
                 <div class="row">
                     <div class="col-6">
                         <div class="edit-options__item">
@@ -44,9 +54,17 @@
                         <vs-switch v-model="item.label"/>
                     </div>
                 </div>
-                <div class="edit-options__item edit-options__item--switch">
-                    <label for="">Required</label>
-                    <vs-switch v-model="item.required"/>
+                <div class="edit-options__item-group">
+                    <div class="edit-options__item edit-options__item--switch">
+                        <label for="">Required</label>
+                        <vs-switch v-model="item.required"/>
+                    </div>
+                </div>
+                <div class="edit-options__item-group">
+                    <div class="edit-options__item edit-options__item--switch">
+                        <label for="">Read only?</label>
+                        <vs-switch v-model="item.readOnly"/>
+                    </div>
                 </div>
             </div>
             <div class="edit-options" v-if="item.type == 'column'">
@@ -80,7 +98,7 @@
                     <vs-input class="inputx" vs-label="Panel Title" :placeholder="item.name" v-model="item.name"/>
                 </div>
                 <div class="edit-options__item">
-                    <span>Select the button type (<a href="https://getbootstrap.com/docs/4.1/components/buttons/">See here for examples</a>):</span>
+                    <span>Select the background color (<a href="https://getbootstrap.com/docs/4.1/components/buttons/">See here for examples</a>):</span>
                      <vs-select class="selectExample" label="Figuras" v-model="item.backgroundColor">
                         <vs-select-item  vs-value="primary" vs-text="Primary" />
                         <vs-select-item  vs-value="secondary" vs-text="Secondary" />
@@ -94,6 +112,11 @@
                     </vs-select>
 
               
+                </div>
+            </div>
+            <div class="edit-options" v-if="item.type == 'text'">
+                 <div class="edit-options__item">
+                    <vs-textarea class="inputx" vs-label="Text Body" :placeholder="item.body" v-model="item.body"/>
                 </div>
             </div>
         </div>

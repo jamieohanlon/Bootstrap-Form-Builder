@@ -1,8 +1,9 @@
 <template>
 
-    <div :class="['element element-'+ el.type]">{{ el.name }} 
+    <div :class="['element element-'+ el.type]"><span>{{ el.type !== "text" ? el.name : el.body }}</span>
+        <span class="element-col" v-if="el.type == 'column'">({{ el.columnSize }} of 12)</span>
         <div class="element-tools">
-            <FormItemEdit :item="el" v-show="el.type !== 'container' || el.type !== 'row'"></FormItemEdit>
+            <FormItemEdit :item="el" v-show="noEdit"></FormItemEdit>
             <vs-button @click="deleteItem" color="danger" vs-size="small" vs-type="flat">&#x2715;</vs-button>
         </div>
 
@@ -25,11 +26,19 @@ export default {
         draggableChild,
         FormItemEdit
     },
+    data() {
+        return {
+            dupIndex: 0
+        }
+    },
     methods: {
         deleteItem: function() {
-            console.log("Index: ", this.index);
-            console.log("Items: ", this.items);
            this.items.splice(this.index, 1);
+        }
+    },
+    computed: {
+        noEdit() {
+            return this.el.type !== "container" && this.el.type !== "row";
         }
     }
 
@@ -43,6 +52,10 @@ export default {
     position: absolute;
     top: 0.5rem;
     right: 1rem;
+}
+.element-col {
+    font-size: 12px;
+    color: darkgrey;
 }
 </style>
 
